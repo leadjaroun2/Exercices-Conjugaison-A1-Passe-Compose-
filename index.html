@@ -3,16 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quiz La Conjugaison au Présent</title>
+    <title>Quiz Le Passé Composé</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #003057; /* Bleu Marine Management */
-            --accent: #00A9CE; /* Bleu Azur */
-            --success: #27AE60;
-            --error: #E74C3C;
+            --primary: #1E3A8A; /* Bleu Foncé Classique */
+            --accent: #3B82F6; /* Bleu Vif */
+            --success: #10B981;
+            --error: #EF4444;
             --bg: #F8FAFC;
         }
 
@@ -37,7 +37,6 @@
             box-sizing: border-box;
         }
 
-        /* Barre de progression */
         .header {
             display: flex;
             justify-content: space-between;
@@ -61,7 +60,6 @@
             transition: width 0.4s ease;
         }
 
-        /* Zone Question et Instructions */
         h1 {
             font-family: 'Playfair Display', serif;
             color: var(--primary);
@@ -92,7 +90,6 @@
             margin-bottom: 5px;
         }
 
-        /* Indication de traduction interactive */
         .translation-hint {
             display: inline-block;
             margin-top: 8px;
@@ -108,7 +105,6 @@
             color: var(--accent);
         }
 
-        /* Boutons d'options */
         .options-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -150,7 +146,6 @@
             color: #991B1B;
         }
 
-        /* Feedback */
         .feedback {
             margin-top: 25px;
             padding: 15px;
@@ -175,10 +170,9 @@
         }
 
         .next-btn:hover { 
-            background: #002340;
+            background: #12255B;
         }
 
-        /* Ecran Final */
         #result-screen { 
             text-align: center;
             display: none; 
@@ -203,8 +197,8 @@
             <span id="score-count" style="font-weight: 600; color: var(--primary);">Score: 0</span>
         </div>
 
-        <h1>Le Présent de l'Indicatif</h1>
-        <div class="instruction-text" id="instruction-text">Choose the correct verb form for the blank space.</div>
+        <h1>Le Passé Composé</h1>
+        <div class="instruction-text" id="instruction-text">Choose the correct past tense form for the blank space.</div>
         
         <div class="question-box">
             <div class="question-text" id="q-text">Chargement...</div>
@@ -225,53 +219,53 @@
 </div>
 
 <script>
-    // LISTE TOTALE DES 38 VERBES DEMANDÉS
+    // POOL DES 38 VERBES CONJUGUÉS AU PASSÉ COMPOSÉ
     const allVerbsPool = [
-        // --- 1ER GROUPE (14 Verbes) ---
-        { q: "Vous _______ (travailler) ici ?", inst: "Conjugate this regular -ER verb:", t: "Do you work here?", o: ["travaillez", "travailles", "travaille", "travaillent"], a: 0 },
-        { q: "Vous _______ (étudier) beaucoup.", inst: "Conjugate this regular -ER verb:", t: "You study a lot.", o: ["étudiez", "étudies", "étudie", "étudient"], a: 0 },
-        { q: "Nous _______ (manger) ensemble.", inst: "Watch out for the spelling change with 'Nous':", t: "We eat together.", o: ["mangeons", "mangons", "mangez", "mangent"], a: 0 },
-        { q: "J'_______ (habiter) à Paris.", inst: "Conjugate this regular -ER verb starting with a silent H:", t: "I live in Paris.", o: ["habite", "habites", "habitons", "habitez"], a: 0 },
-        { q: "Ils _______ (aimer) la musique.", inst: "Conjugate this regular -ER verb:", t: "They love/like music.", o: ["aiment", "aime", "aimez", "aimons"], a: 0 },
-        { q: "J'_______ (adorer) le chocolat.", inst: "Conjugate this regular -ER verb:", t: "I adore chocolate.", o: ["adore", "adores", "adorez", "adorons"], a: 0 },
-        { q: "Elle _______ (détester) les devoirs.", inst: "Conjugate this regular -ER verb:", t: "She hates homework.", o: ["déteste", "détestes", "détestent", "détestons"], a: 0 },
-        { q: "Nous _______ (parler) français.", inst: "Conjugate this regular -ER verb:", t: "We speak French.", o: ["parlons", "parlez", "parlent", "parles"], a: 0 },
-        { q: "Elles _______ (regarder) un film.", inst: "Conjugate this regular -ER verb:", t: "They are watching a movie.", o: ["regardent", "regarde", "regardes", "regardez"], a: 0 },
-        { q: "Ils _______ (écouter) la radio.", inst: "Conjugate this regular -ER verb:", t: "They are listening to the radio.", o: ["écoutent", "écoute", "écoutes", "écoutez"], a: 0 },
-        { q: "Tu _______ (acheter) un nouveau livre.", inst: "Watch out for the accent change in the root:", t: "You are buying a new book.", o: ["achètes", "achetes", "achète", "achetez"], a: 0 },
-        { q: "Tu _______ (payer) l'addition.", inst: "Watch out for the vowel change (Y to I):", t: "You pay the bill.", o: ["paies", "payes", "paie", "payez"], a: 0 },
-        { q: "Elle _______ (chercher) ses clés.", inst: "Conjugate this regular -ER verb:", t: "She is looking for her keys.", o: ["cherche", "cherches", "cherchons", "cherchent"], a: 0 },
-        { q: "Nous _______ (trouver) une solution.", inst: "Conjugate this regular -ER verb:", t: "We find a solution.", o: ["trouvons", "trouvez", "trouve", "trouvent"], a: 0 },
+        // --- 1ER GROUPE (14 Verbes - Auxiliaire Avoir) ---
+        { q: "Hier, vous _______ (travailler) toute la journée.", inst: "Regular -ER verb in past tense:", t: "Yesterday, you worked all day.", o: ["avez travaillé", "êtes travaillé", "avez travailler", "avez travaillés"], a: 0 },
+        { q: "L'année dernière, vous _______ (étudier) le français.", inst: "Regular -ER verb in past tense:", t: "Last year, you studied French.", o: ["avez étudié", "êtes étudié", "avez étudiez", "ont étudié"], a: 0 },
+        { q: "Ce midi, nous _______ (manger) au restaurant.", inst: "Regular -ER verb in past tense:", t: "This noon, we ate at the restaurant.", o: ["avons mangé", "sommes mangé", "avons manger", "avons mangés"], a: 0 },
+        { q: "Pendant dix ans, j'_______ (habiter) à Londres.", inst: "Regular -ER verb in past tense:", t: "For ten years, I lived in London.", o: ["ai habité", "suis habité", "ai habiter", "as habité"], a: 0 },
+        { q: "Ils _______ (aimer) beaucoup ce film.", inst: "Regular -ER verb in past tense:", t: "They liked this movie very much.", o: ["ont aimé", "ont aime", "sont aimé", "avez aimé"], a: 0 },
+        { q: "J'_______ (adorer) mon voyage en Italie.", inst: "Regular -ER verb in past tense:", t: "I adored my trip to Italy.", o: ["ai adoré", "suis adoré", "ai adorer", "as adoré"], a: 0 },
+        { q: "Elle _______ (détester) le cours d'histoire.", inst: "Regular -ER verb in past tense:", t: "She hated the history class.", o: ["a détesté", "est détesté", "a détester", "ont détesté"], a: 0 },
+        { q: "La semaine passée, nous _______ (parler) avec le directeur.", inst: "Regular -ER verb in past tense:", t: "Last week, we spoke with the director.", o: ["avons parlé", "sommes parlé", "avons parlés", "avez parlé"], a: 0 },
+        { q: "Elles _______ (regarder) un documentaire hier soir.", inst: "Regular -ER verb with feminine plural subject (no agreement with 'avoir' here!):", t: "They watched a documentary last night.", o: ["ont regardé", "ont regardées", "sont regardées", "ont regarder"], a: 0 },
+        { q: "Ils _______ (écouter) les informations.", inst: "Regular -ER verb in past tense:", t: "They listened to the news.", o: ["ont écouté", "sont écoutés", "ont écoutés", "ont écouter"], a: 0 },
+        { q: "Tu _______ (acheter) une nouvelle voiture ?", inst: "Regular -ER verb in past tense:", t: "Did you buy a new car?", o: ["as acheté", "es acheté", "as achète", "a acheté"], a: 0 },
+        { q: "Tu _______ (payer) l'électricien ?", inst: "Regular -ER verb in past tense:", t: "Did you pay the electrician?", o: ["as payé", "es payé", "as payez", "a payé"], a: 0 },
+        { q: "Elle _______ (chercher) ses lunettes partout.", inst: "Regular -ER verb in past tense:", t: "She looked for her glasses everywhere.", o: ["a cherché", "est cherché", "a cherchée", "ont cherché"], a: 0 },
+        { q: "Enfin, nous _______ (trouver) la bonne adresse.", inst: "Regular -ER verb in past tense:", t: "Finally, we found the right address.", o: ["avons trouvé", "sommes trouvé", "avons trouvés", "avez trouvé"], a: 0 },
 
-        // --- REFLEXIVE / PRONOMINAUX (10 Verbes) ---
-        { q: "Ils _______ (s'appeler) comment ?", inst: "Watch out for the double consonant and reflexive pronoun:", t: "What are their names?", o: ["s'appellent", "s'appelent", "t'appelles", "m'appelle"], a: 0 },
-        { q: "Je _______ (se réveiller) à 7h.", inst: "Conjugate this reflexive verb:", t: "I wake up at 7 AM.", o: ["me réveille", "te réveilles", "se réveille", "nous réveillons"], a: 0 },
-        { q: "Tu _______ (se lever) tôt.", inst: "Watch out for the accent change and pronoun:", t: "You get up early.", o: ["te lèves", "te leves", "me lève", "se lève"], a: 0 },
-        { q: "Il _______ (se doucher) le matin.", inst: "Conjugate this reflexive verb:", t: "He takes a shower in the morning.", o: ["se douche", "me douche", "te douches", "se douchent"], a: 0 },
-        { q: "Nous _______ (s'habiller) chaudement.", inst: "Watch out for the pronoun contraction with a vowel:", t: "We dress warmly.", o: ["nous habillons", "vous habillez", "s'habillent", "m'habille"], a: 0 },
-        { q: "Tu _______ (se brosser) les dents.", inst: "Conjugate this reflexive verb:", t: "You brush your teeth.", o: ["te brosses", "me brosse", "se brosse", "vous brossez"], a: 0 },
-        { q: "Vous _______ (se préparer) pour sortir.", inst: "Conjugate this reflexive verb:", t: "You are getting ready to go out.", o: ["vous préparez", "nous préparons", "se préparent", "te prépares"], a: 0 },
-        { q: "Elle _______ (se reposer) dans le salon.", inst: "Conjugate this reflexive verb:", t: "She is resting in the living room.", o: ["se repose", "me repose", "te reposes", "se reposent"], a: 0 },
-        { q: "Je _______ (se coucher) tard.", inst: "Conjugate this reflexive verb:", t: "I go to bed late.", o: ["me couche", "te couches", "se couche", "nous couchons"], a: 0 },
-        { q: "Ils _______ (s'endormir) rapidement.", inst: "Conjugate this irregular reflexive verb:", t: "They fall asleep quickly.", o: ["s'endorment", "s'endormissent", "se dorment", "t'endors"], a: 0 },
+        // --- PRONOMINAUX / RÉFLEXIFS (10 Verbes - Auxiliaire Être & Accord obligatoire) ---
+        { q: "Ils _______ (s'appeler) au téléphone hier.", inst: "Reflexive verb (Plural agreement with Être):", t: "They called each other on the phone yesterday.", o: ["se sont appelés", "ont appelé", "s'ont appelés", "se sont appelé"], a: 0 },
+        { q: "Ce matin, je _______ (se réveiller) à 6h.", inst: "Reflexive verb in past tense:", t: "This morning, I woke up at 6 AM.", o: ["me suis réveillé", "ai réveillé", "m'ai réveillé", "me suis réveiller"], a: 0 },
+        { q: "Tu _______ (se lever) très tard ce matin.", inst: "Reflexive verb in past tense:", t: "You got up very late this morning.", o: ["te es levé", "t'es levé", "as levé", "t'as levé"], a: 1 },
+        { q: "Il _______ (se doucher) après le sport.", inst: "Reflexive verb in past tense:", t: "He took a shower after sports.", o: ["s'est douché", "a douché", "se douche", "s'a douché"], a: 0 },
+        { q: "Marie _______ (s'habiller) rapidement.", inst: "Reflexive verb with a feminine singular subject (Watch the agreement!):", t: "Marie dressed quickly.", o: ["s'est habillée", "s'est habillé", "a habillé", "s'a habillée"], a: 0 },
+        { q: "Tu _______ (se brosser) les dents.", inst: "Reflexive verb in past tense:", t: "You brushed your teeth.", o: ["t'es brossé", "as brossé", "te es brossé", "t'as brossé"], a: 0 },
+        { q: "Vous _______ (se préparer) pour la fête.", inst: "Reflexive verb in past tense:", t: "You got ready for the party.", o: ["vous êtes préparés", "vous avez préparé", "vous êtes préparer", "se sont préparés"], a: 0 },
+        { q: "Elle _______ (se reposer) tout l'après-midi.", inst: "Reflexive verb with feminine agreement:", t: "She rested all afternoon.", o: ["s'est reposée", "s'est reposé", "a reposé", "s'a reposée"], a: 0 },
+        { q: "Je _______ (se coucher) à minuit.", inst: "Reflexive verb in past tense:", t: "I went to bed at midnight.", o: ["me suis couché", "ai couché", "me suis coucher", "m'ai couché"], a: 0 },
+        { q: "Les enfants _______ (s'endormir) dans la voiture.", inst: "Reflexive verb with plural agreement:", t: "The children fell asleep in the car.", o: ["se sont endormis", "ont endormi", "se sont endormi", "s'ont endormis"], a: 0 },
 
-        // --- 12 ESSENTIALS (12 Verbes) ---
-        { q: "Je _______ (être) fatigué aujourd'hui.", inst: "Conjugate this essential irregular verb:", t: "I am tired today.", o: ["suis", "es", "est", "sommes"], a: 0 },
-        { q: "Tu _______ (avoir) quel âge ?", inst: "Conjugate this essential irregular verb:", t: "How old are you?", o: ["as", "ai", "a", "avez"], a: 0 },
-        { q: "Il _______ (aller) à la gare.", inst: "Conjugate this irregular verb:", t: "He goes to the station.", o: ["va", "vais", "vont", "allez"], a: 0 },
-        { q: "Elle _______ (venir) demain.", inst: "Conjugate this irregular verb:", t: "She is coming tomorrow.", o: ["vient", "viens", "venons", "viennent"], a: 0 },
-        { q: "Nous _______ (faire) du sport.", inst: "Conjugate this frequent irregular verb:", t: "We do sports.", o: ["faisons", "faites", "font", "fais"], a: 0 },
-        { q: "Vous _______ (dire) la vérité.", inst: "Conjugate this frequent irregular verb:", t: "You tell the truth.", o: ["dites", "disons", "disez", "disent"], a: 0 },
-        { q: "Nous _______ (boire) un verre d'eau.", inst: "Conjugate this irregular verb:", t: "We are drinking a glass of water.", o: ["buvons", "boivons", "boivent", "buvez"], a: 0 },
-        { q: "Ils _______ (prendre) le train.", inst: "Conjugate this irregular verb:", t: "They take the train.", o: ["prennent", "prenent", "prend", "prenons"], a: 0 },
-        { q: "Je _______ (vouloir) un café s'il vous plaît.", inst: "Conjugate this irregular modal verb:", t: "I want a coffee please.", o: ["veux", "veut", "voulons", "veulent"], a: 0 },
-        { q: "Tu _______ (lire) un roman intéressant.", inst: "Conjugate this irregular verb:", t: "You are reading an interesting novel.", o: ["lis", "lit", "lisons", "lisez"], a: 0 },
-        { q: "Vous _______ (écrire) un message.", inst: "Conjugate this irregular verb:", t: "You are writing a message.", o: ["écrivez", "écris", "écrivons", "écrivent"], a: 0 },
-        { q: "Ils _______ (voir) la tour Eiffel.", inst: "Conjugate this irregular verb:", t: "They see the Eiffel Tower.", o: ["voient", "vois", "voit", "voyons"], a: 0 },
-
-        // --- 2 OTHERS (2 Verbes) ---
-        { q: "Un grand écrivain _______ (naître) aujourd'hui.", inst: "Conjugate this irregular verb:", t: "A great writer is born today.", o: ["naît", "nais", "naissent", "naissons"], a: 0 },
-        { q: "Le train _______ (arriver) à l'heure.", inst: "Conjugate this regular -ER verb:", t: "The train arrives on time.", o: ["arrive", "arrives", "arrivent", "arrivons"], a: 0 }
+        // --- 12 ESSENTIELS & AUTRES (Iréguliers - Mélange Avoir / Être) ---
+        { q: "J'_______ (être) très surpris par la nouvelle.", inst: "Past participle of ÊTRE (uses Avoir!):", t: "I was very surprised by the news.", o: ["ai été", "suis été", "ai était", "as été"], a: 0 },
+        { q: "Tu _______ (avoir) de la chance !", inst: "Past participle of AVOIR (uses Avoir!):", t: "You were lucky!", o: ["as eu", "as oit", "es eu", "a eu"], a: 0 },
+        { q: "Elle _______ (aller) au supermarché.", inst: "Irregular verb using ÊTRE (Feminine agreement required):", t: "She went to the supermarket.", o: ["est allée", "a allé", "est allé", "ont allé"], a: 0 },
+        { q: "Ils _______ (venir) nous rendre visite.", inst: "Irregular verb using ÊTRE (Plural agreement required):", t: "They came to visit us.", o: ["sont venus", "ont venu", "s'ont venus", "sont venu"], a: 0 },
+        { q: "Nous _______ (faire) un gâteau au chocolat.", inst: "Irregular past participle of FAIRE:", t: "We made a chocolate cake.", o: ["avons fait", "sommes fait", "avons faits", "avez fait"], a: 0 },
+        { q: "Qu'est-ce que vous _______ (dire) ?", inst: "Irregular past participle of DIRE:", t: "What did you say?", o: ["avez dit", "avez dites", "êtes dit", "ont dit"], a: 0 },
+        { q: "Ils _______ (boire) un jus d'orange.", inst: "Irregular past participle of BOIRE:", t: "They drank an orange juice.", o: ["ont bu", "ont buvons", "sont bu", "ont bue"], a: 0 },
+        { q: "Le voleur _______ (prendre) la fuite.", inst: "Irregular past participle of PRENDRE:", t: "The thief took flight / fled.", o: ["a pris", "est pris", "a prit", "ont pris"], a: 0 },
+        { q: "Je _______ (vouloir) partir plus tôt.", inst: "Irregular past participle of VOULOIR:", t: "I wanted to leave earlier.", o: ["ai voulu", "suis voulu", "ai voulut", "as voulu"], a: 0 },
+        { q: "Tu _______ (lire) ce livre ?", inst: "Irregular past participle of LIRE:", t: "Did you read this book?", o: ["as lu", "es lu", "as lut", "a lu"], a: 0 },
+        { q: "Vous _______ (écrire) un e-mail important.", inst: "Irregular past participle of ÉCRIRE:", t: "You wrote an important email.", o: ["avez écrit", "êtes écrit", "avez écris", "avez écrira"], a: 0 },
+        { q: "Nous _______ (voir) un bel arc-en-ciel.", inst: "Irregular past participle of VOIR:", t: "We saw a beautiful rainbow.", o: ["avons vu", "sommes vu", "avons vus", "avez vu"], a: 0 },
+        
+        // --- 2 AUTRES (Naître & Arriver - Auxiliaire Être obligatoire) ---
+        { q: "Le célèbre poète _______ (naître) en 1802.", inst: "Irregular verb using ÊTRE:", t: "The famous poet was born in 1802.", o: ["est né", "a né", "est nait", "a nait"], a: 0 },
+        { q: "Mes amis _______ (arriver) par le train de 14h.", inst: "Verb using ÊTRE (Plural agreement required):", t: "My friends arrived by the 2 PM train.", o: ["sont arrivés", "ont arrivé", "sont arrivé", "ont arrivés"], a: 0 }
     ];
 
     let quizQuestions = [];
@@ -287,14 +281,9 @@
     }
 
     function initQuiz() {
-        // 1. Cloner la liste globale de tous les verbes (38)
         let fullPool = JSON.parse(JSON.stringify(allVerbsPool));
-        
-        // 2. Mélanger toute la liste
         shuffleArray(fullPool);
-        
-        // 3. Extraire uniquement 20 verbes au hasard pour la partie en cours
-        quizQuestions = fullPool.slice(0, 20);
+        quizQuestions = fullPool.slice(0, 20); // Extrait 20 questions aléatoirement
 
         currentIdx = 0;
         score = 0;
@@ -392,9 +381,9 @@
         document.getElementById('final-score').innerText = score + " / 20";
         const comm = document.getElementById('res-comment');
         
-        if(score === 20) comm.innerHTML = "Parfait ! Vous maîtrisez les verbes essentiels de la conjugaison française.<br><i>Perfect! You have a flawless mastery of the essential verbs.</i>";
-        else if(score >= 14) comm.innerHTML = "Très bien ! Bon travail sur les différents verbes et irrégularités.<br><i>Great job! Good command over verbs and irregularities.</i>";
-        else comm.innerHTML = "Continuez d'apprendre et de pratiquer les verbes essentiels !<br><i>Keep learning and practicing essential verbs!</i>";
+        if(score === 20) comm.innerHTML = "Parfait ! Vous maîtrisez parfaitement le passé composé.<br><i>Perfect! You have a flawless mastery of the past tense.</i>";
+        else if(score >= 14) comm.innerHTML = "Très bien ! Bon travail sur les choix d'auxiliaires et les accords.<br><i>Great job! Good command over auxiliary choices and agreements.</i>";
+        else comm.innerHTML = "Continuez d'apprendre et de faire attention aux participes passés irréguliers !<br><i>Keep learning and pay attention to irregular past participles!</i>";
     }
 
     initQuiz();
